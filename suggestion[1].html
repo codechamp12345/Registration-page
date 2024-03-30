@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-image: url('background1.avif');
+            background-size: cover;
+        }
+        
+        h1 {
+            background-color: aqua;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            width: 50%;
+            margin: auto;
+        }
+
+        select, textarea, input[type="text"], input[type="radio"] {
+            margin: 4px;
+            padding: 6px;
+            width: calc(100% - 20px);
+            font-size: 14px; 
+        }
+
+        button[type="submit"] {
+            width: 150px;
+            height: 30px;
+            border: none;
+            font-size: 18px;
+            margin-top: 20px;
+            background-color: rgba(204, 12, 198, 0.888);
+            cursor: pointer;
+            color: aqua;
+            transition: 0.45s ease ease-in-out;
+            align-self: center;
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px 0 rgb(6, 160, 227);
+            }
+            to {
+                box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.8);
+            }
+        }
+
+        .block {
+            border: 2px solid #da0a0a;
+            padding: 10px;
+            margin-bottom: 20px;
+            background-color: #afbbc7;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 10px;
+        }
+
+        /* Animation for Navbar links */
+        .navbar-nav .nav-link {
+            margin-right: 10px;
+            transition: transform 0.5s;
+        }
+
+        .navbar-nav .nav-link:hover {
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="git logo.jpeg" alt="Logo" style="height: 30px; margin-right: 10px;">
+            </a>
+            <!-- Navbar links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.html">HOME</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contactus.html">CONTACT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="help.html">HELP</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="#">
+                            <button class="btn btn-danger" id="logoutBtn">Logout</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    
+    <center><h1>Welcome to GIT Complaint-Box</h1></center>
+
+    <div class="container">
+        <form id="suggestionForm" method="post" action="https://docs.google.com/spreadsheets/d/1BaxcgRWmMrZw8dctPagFjx_ozgcp97O4k-PRaBds2Cs/edit#gid=0">
+            <div class="block">
+                <h2>Are You...</h2>
+                <div class="radio-group">
+                    <div>
+                        <input type="radio" name="relation" id="family" value="student"/> 
+                        <label for="family">Student</label>
+                    </div>
+                    <div>
+                        <input type="radio" name="relation" id="parent" value="parent"/> 
+                        <label for="parent">Parent</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="block">
+                <h2>Type of complaint:</h2>
+                <select name="complaintType" id="complaintType" class="form-select" required>
+                    <option value="type">Select</option>
+                    <option value="Transport">Transport</option>
+                    <option value="Campus">Campus</option>
+                    <option value="Faculty">Faculty</option>
+                    <option value="Teaching">Teaching</option>
+                </select>
+            </div>
+
+            <div class="block">
+                <h2>Write Your complaint:</h2>
+                <textarea rows="6" placeholder="complaint" id="complaintText" name="complaint" class="form-control" required></textarea>
+            </div>
+
+            <div class="block">
+                <h2>How can it be solved:</h2>
+                <input type="text" name="solution" id="solutionText" placeholder="optional" class="form-control">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>  
+        </form>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript">
+        document.getElementById("suggestionForm").onsubmit = function(event) {
+            event.preventDefault();
+            submitComplaint();
+        };
+
+        function submitComplaint() {
+            var relation = document.querySelector('input[name="relation"]:checked');
+            if (!relation) {
+                alert("Please select whether you are a student or a parent.");
+                return;
+            }
+            var relationValue = relation.value;
+            var complaintType = document.getElementById('complaintType').value;
+            var complaintText = document.getElementById('complaintText').value;
+            var solutionText = document.getElementById('solutionText').value;
+
+            alert("Submitted successfully");
+            location.assign("login.html");
+        }
+
+        document.getElementById("logoutBtn").addEventListener("click", function() {
+            location.assign("login.html");
+        });
+    </script>
+</body>
+</html>

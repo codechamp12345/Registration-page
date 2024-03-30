@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Authentication</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+        background-image: url('abhi.jpg'); /* background image */
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+      }
+      .logo {
+        max-height: 55px; /*logo size*/
+        margin-left: 10px;
+      }
+    .container {
+      padding-top: 10px; 
+    }
+form#MainForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 20px;
+  border-radius: 15px;
+}
+form#MainForm .form-floating {
+  width: 90%;
+}
+
+form#MainForm button[type="submit"],
+form#MainForm a.btn {
+  margin-top: 10px;
+}
+.navbar-nav .nav-link {
+  margin-right: 10px;
+  transition: transform 0.5s;
+}
+
+.navbar-nav .nav-link:hover {
+  transform: scale(1.2);
+}
+
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">COMPLAINT-BOX</a>
+      <div class="d-flex justify-content-end align-items-center flex-grow-1">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="login.html">HOME</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="about.html">ABOUT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="contactus.html">CONTACT</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="help.html">HELP</a>
+          </li>
+        </ul>
+        <img src="naac.jpeg" alt="Logo" class="logo">
+        <img src="https://storage.googleapis.com/ezap-prod/colleges/1881/a752696d-7ee7-4471-994d-122cdb7f4a5d.jpg" alt="GIT Lavel Logo" class="logo">
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-5 mx-auto">
+    <form id="MainForm" class="w-50">
+      <h2 class="mb-3" style="color: white;">Login User</h2>
+      <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="emailInp" placeholder="name@example.com">
+        <label for="floatingInput">Email address</label>
+      </div>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="passwordInp" placeholder="Password">
+        <label for="floatingPassword">Password</label>
+      </div>
+      <button type="submit" class="btn btn-primary ms-1">Login</button>
+      <a href="register.html" class="btn btn-primary ms-1">Sign Up</a>
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script type="module">
+    //Firebase authentication script 
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcX_0-UjuwfjyyTGjJSlUsSGyNMH0HYGk",
+      authDomain: "fir-login-3d1ea.firebaseapp.com",
+      projectId: "fir-login-3d1ea",
+      storageBucket: "fir-login-3d1ea.appspot.com",
+      messagingSenderId: "950605913946",
+      appId: "1:950605913946:web:85a3da2e7b57b2f02f5d63",
+      measurementId: "G-L863RDZKQH"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase();
+    const auth = getAuth(app);
+    const dbref = ref(db);
+
+    let EmailInp =document.getElementById('emailInp');
+    let PassInp =document.getElementById('passwordInp');
+    let MainForm =document.getElementById('MainForm');
+    let SignInUser = evt =>{
+      evt.preventDefault();
+      signInWithEmailAndPassword(auth, EmailInp.value , PassInp.value)
+      .then((credentials)=>{
+          get(child(dbref, 'UsersAuthList/' + credentials.user.uid)).then((snapshot)=>{
+            if(snapshot.exists){
+                sessionStorage.setItem('user-info', JSON.stringify({
+                    firstname: snapshot.val.firstname,
+                    lastname: snapshot.val.lastname
+                }))
+                sessionStorage.setItem("user-creds", JSON.stringify(credentials.user));
+                window.location.href ='suggestion[1].html'; 
+            }
+          })
+      })
+      .catch((error)=>{
+        alert(error.message);
+
+      })
+    }
+    MainForm.addEventListener('submit', SignInUser);
+  </script>
+</body>
+</html>
